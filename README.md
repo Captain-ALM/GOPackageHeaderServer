@@ -4,7 +4,8 @@
 
 This allows for the required meta headers to be outputted in order for the GO package system to find the source files of the package.
 
-The middleware can be configured in runtime, the server has a YAML configuration.
+The outputter can be configured in runtime, the server has a YAML configuration.
+The outputter can be used to add the extra meta tags to the head of the HTML document.
 
 Maintainer: 
 [Captain ALM](https://code.mrmelon54.xyz/alfred)
