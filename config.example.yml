@@ -1,0 +1,17 @@
+# Example Configuration file, all settings are defaulted to empty unless otherwise stated:
+# NOTE: Not all the shown values are default (But the defaults are all documented in the proceeding comment and undocumented ones are empty by default)
+listen: #HTTP server settings
+  web: ":8080" #Listening address and port in the format address:port
+  readTimeout: 30s #Read timeout of the HTTP servers as a duration, minimum: 1s
+  writeTimeout: 30s #Write timeout of the HTTP servers as a duration, minimum: 1s
+  identify: false #Send server identification headers
+zones: #An array of zones
+  - name: test #The name of the package set
+    domains: ["localhost:8080"] #An array of domains this package set use (Each domain can only be registered with one zone)
+    havePageContents: true #Output a header and link to the target repo
+    basePath: "localhost" #The base-path, also known as, package name
+    basePrefixURL: "http://localhost" #The base git URL
+    usernameProvided: true #If the username has been provided
+    username: "captain-alm" #The username to append to the start of a path under the prefix
+    suffixDirectoryURL: "src/branch/master{/dir}" #The suffix location of the main branch for directory usage
+    suffixFileURL: "src/branch/master{/dir}/{file}#L{line}" #The suffix location of the main branch for file usage
