@@ -15,7 +15,7 @@ type PageHandler struct {
 	MetaOutput *outputMeta.PackageMetaTagOutputter
 }
 
-//go:embed outputpage.html
+//go:embed output-page.html
 var outputPage string
 
 var pageTemplateFuncMap template.FuncMap = template.FuncMap{
