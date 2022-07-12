@@ -12,7 +12,7 @@ zones: #An array of zones
     havePageContents: true #Output a header and link to the target repo
     basePath: "localhost" #The base-path, also known as, package name
     basePrefixURL: "http://localhost" #The base git URL
-    usernameProvided: true #If the username has been provided
+    usernameProvided: true #If the username would be provided in requests to the server (When false the value of username can be used)
     username: "captain-alm" #The username to append to the start of a path under the prefix
     suffixDirectoryURL: "src/branch/master{/dir}" #The suffix location of the main branch for directory usage
     suffixFileURL: "src/branch/master{/dir}/{file}#L{line}" #The suffix location of the main branch for file usage
