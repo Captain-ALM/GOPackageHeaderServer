@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    {{ if .PageHandler.OutputPage }}
     {{ if isNotEmpty .PageHandler.Name }}
-    <title>Go Package: {{ .PageHandler.Name }}</title>
+    <title>Go Package Set: {{ .PageHandler.Name }}</title>
+    {{ end }}
+    {{ if isNotEmpty .PageHandler.CSS }}
+    <link rel="stylesheet" type="text/css" href="{{ .PageHandler.CSS }}">
+    {{ end }}
     {{ end }}
     <meta name="go-import" content="{{ .GetGoImportMetaContent }}">
     <meta name="go-source" content="{{ .GetGoSourceMetaContent }}">
@@ -10,7 +15,7 @@
 <body>
     {{ if .PageHandler.OutputPage }}
     {{ if isNotEmpty .PageHandler.Name }}
-    <h1>Go Package: {{ .PageHandler.Name }}</h1>
+    <h1>Go Package Set: {{ .PageHandler.Name }}</h1>
     {{ end }}
     <a href="{{ .GetLink }}">{{ .GetLink }}</a>
     {{ end }}

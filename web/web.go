@@ -14,6 +14,7 @@ func New(yaml conf.ConfigYaml) (*http.Server, map[string]*PageHandler) {
 	for _, zc := range yaml.Zones {
 		currentPage := &PageHandler{
 			Name:       zc.Name,
+			CSS:        zc.CssURL,
 			OutputPage: zc.HavePageContents,
 			MetaOutput: zc.GetPackageMetaTagOutputter(),
 		}

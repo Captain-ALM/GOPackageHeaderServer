@@ -8,6 +8,7 @@ listen: #HTTP server settings
 zones: #An array of zones
   - name: test #The name of the package set
     domains: ["localhost:8080"] #An array of domains this package set use (Each domain can only be registered with one zone)
+    cssURL: "http://localhost/sheet.css" #A URL to the CSS file to use for outputted pages (If blank or not provided, no CSS is included)
     havePageContents: true #Output a header and link to the target repo
     basePath: "localhost" #The base-path, also known as, package name
     basePrefixURL: "http://localhost" #The base git URL

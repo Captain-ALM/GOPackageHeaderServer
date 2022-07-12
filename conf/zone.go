@@ -5,6 +5,7 @@ import "golang.captainalm.com/GOPackageHeaderServer/outputMeta"
 type ZoneYaml struct {
 	Name               string   `yaml:"name"`
 	Domains            []string `yaml:"domains"`
+	CssURL             string   `yaml:"cssURL"`
 	HavePageContents   bool     `yaml:"havePageContents"`
 	BasePath           string   `yaml:"basePath"`
 	UsernameProvided   bool     `yaml:"usernameProvided"`

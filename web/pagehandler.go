@@ -10,6 +10,7 @@ import (
 
 type PageHandler struct {
 	Name       string
+	CSS        string
 	OutputPage bool
 	MetaOutput *outputMeta.PackageMetaTagOutputter
 }
