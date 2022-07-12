@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{ if isNotEmpty .PageHandler.Name }}
+    <title>Go Package: {{ .PageHandler.Name }}</title>
+    {{ end }}
+    <meta name="go-import" content="{{ .GetGoImportMetaContent }}">
+    <meta name="go-source" content="{{ .GetGoSourceMetaContent }}">
+</head>
+<body>
+    {{ if .PageHandler.OutputPage }}
+    {{ if isNotEmpty .PageHandler.Name }}
+    <h1>Go Package: {{ .PageHandler.Name }}</h1>
+    {{ end }}
+    <a href="{{ .GetLink }}">{{ .GetLink }}</a>
+    {{ end }}
+</body>
+</html>

@@ -1,11 +1,11 @@
 package web
 
 import (
+	_ "embed"
 	"golang.captainalm.com/GOPackageHeaderServer/outputMeta"
+	"html/template"
 	"net/http"
-	"path"
 	"strconv"
-	"strings"
 )
 
 type PageHandler struct {
@@ -14,30 +14,36 @@ type PageHandler struct {
 	MetaOutput *outputMeta.PackageMetaTagOutputter
 }
 
+//go:embed outputpage.html
+var outputPage string
+
+var pageTemplateFuncMap template.FuncMap = template.FuncMap{
+	"isNotEmpty": func(stringIn string) bool {
+		return stringIn != ""
+	},
+}
+
 func (pgh *PageHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if request.Method == http.MethodGet || request.Method == http.MethodHead {
-		thePage := "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n"
-		if pgh.OutputPage && pgh.Name != "" {
-			thePage += "<title>Go Package: " + pgh.Name + "</title>\r\n"
+		tmpl, err := template.New("page-handler").Funcs(pageTemplateFuncMap).Parse(outputPage)
+		if err != nil {
+			writeResponseHeaderCanWriteBody(request.Method, writer, http.StatusInternalServerError, "Page Template Parsing Failure")
+			return
 		}
-		thePage += pgh.MetaOutput.GetMetaTags(request.URL.Path) + "\r\n</head>\r\n<body>\r\n"
-		if pgh.OutputPage {
-			if pgh.Name != "" {
-				thePage += "<h1>Go Package: " + pgh.Name + "</h1>\r\n"
-			}
-			var theLink string
-			if pgh.MetaOutput.Username == "" {
-				theLink = pgh.MetaOutput.BasePrefixURL + "/" + strings.TrimLeft(path.Clean(request.URL.Path), "/")
-			} else {
-				theLink = pgh.MetaOutput.BasePrefixURL + "/" + strings.TrimLeft(path.Join(pgh.MetaOutput.Username, request.URL.Path), "/")
-			}
-			thePage += "<a href=\"" + theLink + "\">" + theLink + "</a>\r\n"
+		tm := handlerTemplateMarshal{
+			PageHandler: *pgh,
+			RequestPath: request.URL.Path,
 		}
-		thePage += "</body>\r\n</html>\r\n"
-		writer.Header().Set("Content-Length", strconv.Itoa(len([]byte(thePage))))
+		theBuffer := &BufferedWriter{}
+		err = tmpl.Execute(theBuffer, tm)
+		if err != nil {
+			writeResponseHeaderCanWriteBody(request.Method, writer, http.StatusInternalServerError, "Page Template Execution Failure")
+			return
+		}
+		writer.Header().Set("Content-Length", strconv.Itoa(len(theBuffer.Data)))
 		writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if writeResponseHeaderCanWriteBody(request.Method, writer, http.StatusOK, "") {
-			_, _ = writer.Write([]byte(thePage))
+			_, _ = writer.Write(theBuffer.Data)
 		}
 	} else {
 		writer.Header().Set("Allow", http.MethodOptions+", "+http.MethodGet+", "+http.MethodHead)

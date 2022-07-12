@@ -14,9 +14,17 @@ type PackageMetaTagOutputter struct {
 }
 
 func (pkgMTO *PackageMetaTagOutputter) GetMetaTags(pathIn string) string {
-	return "<meta name=\"go-import\" content=\"" + pkgMTO.getPrefix(pathIn) + " git " + pkgMTO.getHomeURL(pathIn) + "\">\r\n" +
-		"<meta name=\"go-source\" content=\"" + pkgMTO.getPrefix(pathIn) + " " + pkgMTO.getHomeURL(pathIn) + " " +
-		pkgMTO.getDirectoryURL(pathIn) + " " + pkgMTO.getFileURL(pathIn) + "\">"
+	return "<meta name=\"go-import\" content=\"" + pkgMTO.GetMetaContentForGoImport(pathIn) + "\">\r\n" +
+		"<meta name=\"go-source\" content=\"" + pkgMTO.GetMetaContentForGoSource(pathIn) + "\">"
+}
+
+func (pkgMTO *PackageMetaTagOutputter) GetMetaContentForGoImport(pathIn string) string {
+	return pkgMTO.getPrefix(pathIn) + " git " + pkgMTO.getHomeURL(pathIn)
+}
+
+func (pkgMTO *PackageMetaTagOutputter) GetMetaContentForGoSource(pathIn string) string {
+	return pkgMTO.getPrefix(pathIn) + " " + pkgMTO.getHomeURL(pathIn) + " " +
+		pkgMTO.getDirectoryURL(pathIn) + " " + pkgMTO.getFileURL(pathIn)
 }
 
 func (pkgMTO *PackageMetaTagOutputter) assureBasePrefixURL() (failed bool) {
