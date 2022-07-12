@@ -41,11 +41,7 @@ func (pkgMTO *PackageMetaTagOutputter) getPrefix(pathIn string) string {
 	if pkgMTO.BasePath == "" {
 		return "_"
 	}
-	if pkgMTO.Username == "" {
-		return path.Join(pkgMTO.BasePath, pathIn)
-	} else {
-		return path.Join(pkgMTO.BasePath, pkgMTO.Username, pathIn)
-	}
+	return path.Join(pkgMTO.BasePath, pathIn)
 }
 
 func (pkgMTO *PackageMetaTagOutputter) getHomeURL(pathIn string) string {

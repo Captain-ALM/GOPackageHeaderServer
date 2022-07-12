@@ -26,6 +26,7 @@ func New(yaml conf.ConfigYaml) (*http.Server, map[string]*PageHandler) {
 			}
 		}
 	}
+	router.PathPrefix("/").HandlerFunc(domainNotAllowed)
 	if yaml.Listen.Identify {
 		router.Use(headerMiddleware)
 	}
@@ -49,6 +50,19 @@ func runBackgroundHttp(s *http.Server) {
 			log.Println("The http server shutdown successfully")
 		} else {
 			log.Fatalf("[Http] Error trying to host the http server: %s\n", err.Error())
+		}
+	}
+}
+
+func domainNotAllowed(rw http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodGet || req.Method == http.MethodHead {
+		writeResponseHeaderCanWriteBody(req.Method, rw, http.StatusNotFound, "Domain Not Allowed")
+	} else {
+		rw.Header().Set("Allow", http.MethodOptions+", "+http.MethodGet+", "+http.MethodHead)
+		if req.Method == http.MethodOptions {
+			writeResponseHeaderCanWriteBody(req.Method, rw, http.StatusOK, "")
+		} else {
+			writeResponseHeaderCanWriteBody(req.Method, rw, http.StatusMethodNotAllowed, "")
 		}
 	}
 }
