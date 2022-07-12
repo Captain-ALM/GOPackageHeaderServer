@@ -16,3 +16,9 @@ zones: #An array of zones
     username: "captain-alm" #The username to append to the start of a path under the prefix
     suffixDirectoryURL: "src/branch/master{/dir}" #The suffix location of the main branch for directory usage
     suffixFileURL: "src/branch/master{/dir}/{file}#L{line}" #The suffix location of the main branch for file usage
+    rangeSupported: true #Are range requests supported
+    cacheSettings: #Cache settings
+      maxAge: 0 #The maximum age of the cache
+      notModifiedUsingLastModified: true #Are the conditional headers attached to Last-Modified used to work out if to send a 304 Cache Redirect
+      notModifiedUsingETags: true #Are the conditional headers attached to ETag used to work out if to send a 304 Cache Redirect
+

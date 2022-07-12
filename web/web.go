@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/gorilla/mux"
 	"golang.captainalm.com/GOPackageHeaderServer/conf"
+	"golang.captainalm.com/GOPackageHeaderServer/web/utils"
 	"log"
 	"net/http"
 	"strings"
@@ -13,10 +14,12 @@ func New(yaml conf.ConfigYaml) (*http.Server, map[string]*PageHandler) {
 	var pages = make(map[string]*PageHandler)
 	for _, zc := range yaml.Zones {
 		currentPage := &PageHandler{
-			Name:       zc.Name,
-			CSS:        zc.CssURL,
-			OutputPage: zc.HavePageContents,
-			MetaOutput: zc.GetPackageMetaTagOutputter(),
+			Name:           zc.Name,
+			CSS:            zc.CssURL,
+			OutputPage:     zc.HavePageContents,
+			RangeSupported: zc.RangeSupported,
+			MetaOutput:     zc.GetPackageMetaTagOutputter(),
+			CacheSettings:  zc.CacheSettings,
 		}
 		for _, d := range zc.Domains {
 			ld := strings.ToLower(d)
@@ -56,13 +59,13 @@ func runBackgroundHttp(s *http.Server) {
 
 func domainNotAllowed(rw http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodGet || req.Method == http.MethodHead {
-		writeResponseHeaderCanWriteBody(req.Method, rw, http.StatusNotFound, "Domain Not Allowed")
+		utils.WriteResponseHeaderCanWriteBody(req.Method, rw, http.StatusNotFound, "Domain Not Allowed")
 	} else {
 		rw.Header().Set("Allow", http.MethodOptions+", "+http.MethodGet+", "+http.MethodHead)
 		if req.Method == http.MethodOptions {
-			writeResponseHeaderCanWriteBody(req.Method, rw, http.StatusOK, "")
+			utils.WriteResponseHeaderCanWriteBody(req.Method, rw, http.StatusOK, "")
 		} else {
-			writeResponseHeaderCanWriteBody(req.Method, rw, http.StatusMethodNotAllowed, "")
+			utils.WriteResponseHeaderCanWriteBody(req.Method, rw, http.StatusMethodNotAllowed, "")
 		}
 	}
 }
