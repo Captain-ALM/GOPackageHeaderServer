@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"path"
+	"path/filepath"
 	"sync"
 	"syscall"
 	"time"
@@ -48,8 +49,18 @@ func main() {
 
 	check(os.MkdirAll(dataDir, 0777))
 
+	//Config file processing:
+	configLocation := os.Getenv("CONFIG_FILE")
+	if configLocation == "" {
+		configLocation = path.Join(dataDir, "config.yml")
+	} else {
+		if !filepath.IsAbs(configLocation) {
+			configLocation = path.Join(dataDir, configLocation)
+		}
+	}
+
 	//Config loading:
-	configFile, err := os.Open(path.Join(dataDir, "config.yml"))
+	configFile, err := os.Open(configLocation)
 	if err != nil {
 		log.Fatalln("Failed to open config.yml")
 	}
