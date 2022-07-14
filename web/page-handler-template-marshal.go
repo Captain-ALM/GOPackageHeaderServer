@@ -20,8 +20,8 @@ func (htm handlerTemplateMarshal) GetGoSourceMetaContent() string {
 
 func (htm handlerTemplateMarshal) GetLink() string {
 	if htm.PageHandler.MetaOutput.Username == "" {
-		return htm.PageHandler.MetaOutput.BasePrefixURL + "/" + strings.TrimLeft(path.Clean(htm.RequestPath), "/")
+		return htm.PageHandler.MetaOutput.BasePrefixURL + "/" + strings.TrimLeft(path.Clean(htm.PageHandler.MetaOutput.GetPath(htm.RequestPath)), "/")
 	} else {
-		return htm.PageHandler.MetaOutput.BasePrefixURL + "/" + strings.TrimLeft(path.Join(htm.PageHandler.MetaOutput.Username, htm.RequestPath), "/")
+		return htm.PageHandler.MetaOutput.BasePrefixURL + "/" + strings.TrimLeft(path.Join(htm.PageHandler.MetaOutput.Username, htm.PageHandler.MetaOutput.GetPath(htm.RequestPath)), "/")
 	}
 }

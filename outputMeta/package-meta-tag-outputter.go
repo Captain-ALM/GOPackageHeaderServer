@@ -11,6 +11,7 @@ type PackageMetaTagOutputter struct {
 	BasePrefixURL      string
 	SuffixDirectoryURL string
 	SuffixFileURL      string
+	PathLengthLimit    uint //The number of path entries in the go import paths
 }
 
 func (pkgMTO *PackageMetaTagOutputter) GetMetaTags(pathIn string) string {
@@ -19,12 +20,27 @@ func (pkgMTO *PackageMetaTagOutputter) GetMetaTags(pathIn string) string {
 }
 
 func (pkgMTO *PackageMetaTagOutputter) GetMetaContentForGoImport(pathIn string) string {
-	return pkgMTO.getPrefix(pathIn) + " git " + pkgMTO.getHomeURL(pathIn)
+	pathLoc := pkgMTO.GetPath(pathIn)
+	return pkgMTO.getPrefix(pathLoc) + " git " + pkgMTO.getHomeURL(pathLoc)
 }
 
 func (pkgMTO *PackageMetaTagOutputter) GetMetaContentForGoSource(pathIn string) string {
-	return pkgMTO.getPrefix(pathIn) + " " + pkgMTO.getHomeURL(pathIn) + " " +
-		pkgMTO.getDirectoryURL(pathIn) + " " + pkgMTO.getFileURL(pathIn)
+	pathLoc := pkgMTO.GetPath(pathIn)
+	return pkgMTO.getPrefix(pathLoc) + " " + pkgMTO.getHomeURL(pathLoc) + " " +
+		pkgMTO.getDirectoryURL(pathLoc) + " " + pkgMTO.getFileURL(pathLoc)
+}
+
+func (pkgMTO *PackageMetaTagOutputter) GetPath(pathIn string) string {
+	cleaned := path.Clean(pathIn)
+	if cleaned == "/" || cleaned == "." {
+		return cleaned
+	}
+	split := strings.Split(cleaned, "/")
+	toReturn := ""
+	for i := 1; i < len(split) && i < int(pkgMTO.PathLengthLimit)+1; i++ {
+		toReturn += split[i] + "/"
+	}
+	return toReturn[:len(toReturn)-1]
 }
 
 func (pkgMTO *PackageMetaTagOutputter) assureBasePrefixURL() (failed bool) {

@@ -12,11 +12,12 @@ zones: #An array of zones
     havePageContents: true #Output a header and link to the target repo
     basePath: "localhost" #The base-path, also known as, package name
     basePrefixURL: "http://localhost" #The base git URL
-    usernameProvided: true #If the username would be provided in requests to the server (When false the value of username can be used)
+    usernameProvided: true #If the username is expected to be provided in requests to the server (When false the value of username can be used)
     username: "captain-alm" #The username to append to the start of a path under the prefix
     suffixDirectoryURL: "src/branch/master{/dir}" #The suffix location of the main branch for directory usage
     suffixFileURL: "src/branch/master{/dir}/{file}#L{line}" #The suffix location of the main branch for file usage
     rangeSupported: true #Are range requests supported
+    pathLengthLimit: 0 #The length of the returned paths in the responses (Number of path entries); (If 0: defaults to 1, if the username is not expected to be provided by the request, otherwise defaulting to 2)
     cacheSettings: #Cache settings
       maxAge: 0 #The maximum age of the cache
       notModifiedUsingLastModified: true #Are the conditional headers attached to Last-Modified used to work out if to send a 304 Cache Redirect
